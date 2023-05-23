@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Dashboard - MASIC Workwear</title>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+  <style>
+    .error{
+      color: red;
+    }
+  </style>
+</head>
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" onclick="materialService.list()">MASIC Workwear</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" onclick="materialService.list()">Home</a>
+          </li>
+          <li class="nav-item">
+            <button style="margin-left:15px;" class="btn btn-outline-success color-button-add" data-bs-toggle="modal" data-bs-target="#exampleModal4">Add colors</button>
+          </li>
+        </ul>
+        <form method="post">
+          <div style="float:left;">
+            <input type="search" id="search-material" class="form-control" placeholder="Search" aria-label="Search"/>
+          </div>
+          <div style="float:left;">
+            <button id="search-button" type="button" class="btn btn-primary" onclick="getSearchResult()">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+        <form class="d-flex">
+          <button class="btn" type="button" style="margin-left:20px; background-color: red;" onclick="adminService.logout()">Logout</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>
+<body style="background-color:grey;">
+  <main>
+    <div class="container marketing" style="margin-top:50px;">
+      <div id="material-list" class="row">
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border text-primary" style="width: 5rem; height: 5rem; margin-top:100px" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</body>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="js/material-service.js"></script>
+<script src="js/admin-service.js"></script>
+<script src="js/color-service.js"></script>
+<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<!-- MODAL FOR UPDATING-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>ID</label>
+          <input readonly name="id" id="id" type="text" class="form-control required" placeholder="Enter ID">
+        </div>
+        <div class="form-group">
+          <label>Brand</label>
+          <select name="brand_id" id="brand_id" type="text" class="form-control required" placeholder="Enter type_id">
+
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select name="type_id" id="type_id" type="text" class="form-control required" placeholder="Enter type_id">
+
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <select name="color_id" id="color_id" type="text" class="form-control required" placeholder="Enter color_id">
+
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Length</label>
+          <input name="length" id="length" type="number" class="form-control required" placeholder="Enter length">
+        </div>
+        <div class="form-group">
+          <label>Available</label>
+          <input name="available" id="available" type="text" class="form-control required" placeholder="Enter availability">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save-material-button" onclick="materialService.update()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL FOR DELETING -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>ID</label>
+          <input readonly name="id" id="id-delete-modal" type="text" class="form-control required" placeholder="Enter ID">
+        </div>
+        <div class="form-group">
+          <label>Brand</label>
+          <input readonly name="brand" id="brand-delete-modal" type="text" class="form-control required" placeholder="Enter brand">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <input readonly name="type" id="type-delete-modal" type="text" class="form-control required" placeholder="Enter type">
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <input readonly name="color" id="color-delete-modal" type="text" class="form-control required" placeholder="Enter color">
+        </div>
+        <div class="form-group">
+          <label>Length</label>
+          <input readonly name="length" id="length-delete-modal" type="number" class="form-control required" placeholder="Enter length">
+        </div>
+        <div class="form-group">
+          <label>Available</label>
+          <input readonly name="available" id="available-delete-modal" type="text" class="form-control required" placeholder="Enter availability">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary delete-material-button" onclick="materialService.delete()">Delete item</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL FOR ADDING NEW ITEM -->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="addMaterialForm">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label>Brand</label>
+            <select class="form-select" id="select-brand">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select class="form-select" id="select-type">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Color</label>
+            <select class="form-select" aria-label="Default select example" id="select-color">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Length</label>
+            <input name="length" id="length-add-modal" type="number" class="form-control required" placeholder="Enter length">
+          </div>
+          <div class="form-group">
+            <label>Available</label>
+            <input name="available" id="available-add-modal" type="text" class="form-control required" placeholder="Enter availability">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add item</button>
+        </div>
+    </form>
+    </div>
+  </div>
+</div>
+<!--MODAL FOF ADDING NEW COLOR-->
+<div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="addColorForm">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add color</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label>Color name</label>
+            <input name="color-name" id="color-add-modal" type="text" class="form-control required" placeholder="Enter color name">
+          </div>
+          <div class="form-group">
+            <p style="color: rgba(0, 0, 0, 0.5);">*Please make sure the first letter of the color is an uppercase letter.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary add-color-button">Add color</button>
+        </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+
+    function getSearchResult(){
+      var name = document.getElementById("search-material").value;
+      materialService.listSearchedMaterial(name);
+    }
+
+    let options3="";
+    $.ajax({
+      url: 'rest/brands/'+$('#id').val(),
+      type: "GET",
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+      },
+      success: function(data){
+        for(let i=0;i<data.length;i++){
+          options3+=`<option value="${data[i].id}">${data[i].name}</option>`
+        }
+        document.getElementById("select-brand").innerHTML=options3;
+      },
+    });
+
+    let options2="";
+    $.ajax({
+      url: 'rest/types/'+$('#id').val(),
+      type: "GET",
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+      },
+      success: function(data){
+        for(let i=0;i<data.length;i++){
+          options2+=`<option value="${data[i].id}">${data[i].name}</option>`
+        }
+        document.getElementById("select-type").innerHTML=options2;
+      },
+    });
+
+    let options="";
+    $.ajax({
+      url: 'rest/colors/'+$('#id').val(),
+      type: "GET",
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+      },
+      success: function(data){
+        for(let i=0;i<data.length;i++){
+          options+=`<option value="${data[i].id}">${data[i].name}</option>`
+        }
+        document.getElementById("select-color").innerHTML=options;
+      },
+    });
+</script>
+
+<script>
+
+  var token=localStorage.getItem("token");
+
+  if(token){
+    materialService.init();
+    colorService.init();
+  }else{
+    window.location.replace("login.html");
+  }
+  //DELETE ITEM MODAL
+  function showModalDelete(id){
+    $('.material-button').attr('disabled', true);
+    $('.material-button-delete').attr('disabled', true);
+    $.ajax({
+      url: 'rest/material/individual/'+id,
+      type: "GET",
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+      },
+      success: function(data){
+        $("#brand-delete-modal").val(data[0].brand_name);
+        $("#type-delete-modal").val(data[0].type_name);
+        $("#id-delete-modal").val(data[0].id);
+        $("#color-delete-modal").val(data[0].color_name);
+        $("#length-delete-modal").val(data[0].length);
+        $("#available-delete-modal").val(data[0].available);
+        $("#exampleModal2").modal("show");
+        $('.material-button').attr('disabled', false);
+        $('.material-button-delete').attr('disabled', false);
+      },
+    });
+  }
+  //ADD NEW COLOR MODAL
+  function showModalColorAdd(){
+    $('.color-button-add').attr('disabled', true);
+    $('.material-button').attr('disabled', true);
+    $('.material-button-delete').attr('disabled', true);
+    $.ajax({
+      url: 'rest/colors/'+id,
+      type: "GET",
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+      },
+      success: function(data){
+        $("#exampleModal4").modal("show");
+        $('.material-button').attr('disabled', false);
+        $('.material-button-delete').attr('disabled', false);
+        $('.color-button-add').attr('disabled', false);
+      },
+    });
+  }
+</script>
+
+</html>
