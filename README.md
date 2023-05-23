@@ -1,6 +1,6 @@
 ## CEN 308 - Software Enginerring
 
-This is an application for inventory management of a textile company. The application allows users to log in and log out, add, edit and delete materials, filter materials, search keywords and add colors. The app oalso shows total length of materials in each color, as well as a chart of this reprezentation.
+This is an application for inventory management of a textile company. The application allows users to log in and log out, add, edit and delete materials, filter materials, search keywords and add colors. The app also shows total length of materials in each color, as well as a chart of this reprezentation.
 
 In this release, the following features are available:
 - the `/brands` endpoint
