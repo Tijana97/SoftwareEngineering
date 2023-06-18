@@ -19,7 +19,7 @@ In this release, the following features are available:
 - the `/login` endpoint (works with `username = dzanin.masic@stu.ibu.edu.ba` and `password = dzanin`)
 - Swagger documentation set up
 - JWT authorization and authentication setup
-- MVC and Singleton patterns applied
+- MVC, Singleton and Front Controller patterns applied
 
 Application URL: [http://209.38.206.111/SoftwareEngineering](url)
 
