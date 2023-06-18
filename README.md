@@ -23,6 +23,8 @@ In this release, the following features are available:
 
 Application URL: [http://209.38.206.111/SoftwareEngineering](url)
 
+The documentation file is in the repository under the name SE_Documentation.pdf
+
 ---
 > Džanin Mašić, Tijana Burazorović
 > 
